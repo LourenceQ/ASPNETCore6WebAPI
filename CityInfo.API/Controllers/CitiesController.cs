@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CityInfo.API.Entities;
+using CityInfo.API.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CityInfo.API.Controllers
 {
@@ -7,14 +9,20 @@ namespace CityInfo.API.Controllers
     public class CitiesController : ControllerBase
     {
         [HttpGet]
-        public JsonResult GetCities()
+        public ActionResult<IEnumerable<CityDTO>> GetCities()
         {
-            return new JsonResult(
-                new List<object>
-                {
-                    new { id  = 1, Name = "New York City" },
-                    new { id = 2, Name = "Oshkosh" }
-                });
+            return Ok(CitiesDataStore.Current.Cities);
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult<CityDTO> GetCity(int id)
+        {
+            var cityToReturn = CitiesDataStore.Current.Cities
+                .FirstOrDefault(c => c.Id == id);
+
+            if (cityToReturn == null) return NotFound(); 
+
+            return Ok(cityToReturn);
         }
     }
 }
