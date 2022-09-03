@@ -3,22 +3,22 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CityInfo.API.Controllers
 {
-    [Route("api/files]")]
+    [Route("api/files")]
     [ApiController]
-    public class FilesController : ControllerBase
+    public class FiliesController : ControllerBase
     {
-        [HttpGet("{fileId}")]
-        public ActionResult GetFile(string fileId)
+        [HttpGet("{field}")]
+        public ActionResult GetFile(string field)
         {
-            var pathToFile = "getting-started-with-rest-slides.pdf";
+            var pathToFile = "file.txt";
 
-            if (!System.IO.File.Exists(pathToFile))
+            if(!System.IO.File.Exists(pathToFile))
+            {
                 return NotFound();
+            }
 
             var bytes = System.IO.File.ReadAllBytes(pathToFile);
-
             return File(bytes, "text/plain", Path.GetFileName(pathToFile));
-                
         }
     }
 }
