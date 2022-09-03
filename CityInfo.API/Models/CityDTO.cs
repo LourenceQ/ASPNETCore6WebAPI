@@ -8,9 +8,9 @@ public class CityDTO
 
     public int NumberOfPointsOfInterest
     {
-        get { return PointsOfInterest.Count; }
+        get { return PointsOfInterestList.Count; }
     }
 
-    public ICollection<PointOfInterestDTO> PointsOfInterest { get; set; }
+    public ICollection<PointOfInterestDTO> PointsOfInterestList { get; set; }
         = new List<PointOfInterestDTO>();
 }

@@ -16,7 +16,7 @@ public class CitiesDataStore
                 Id = 1,
                 Name = "Name1",
                 Description = "Desc1",
-                PointsOfInterest = new List<PointOfInterestDTO>()
+                PointsOfInterestList = new List<PointOfInterestDTO>()
                 {
                     new PointOfInterestDTO()
                     {
@@ -33,7 +33,7 @@ public class CitiesDataStore
                 Id = 2,
                 Name = "Nam2",
                 Description = "Desc2",
-                PointsOfInterest = new List<PointOfInterestDTO>()
+                PointsOfInterestList = new List<PointOfInterestDTO>()
                 {
                     new PointOfInterestDTO()
                     {
@@ -50,7 +50,7 @@ public class CitiesDataStore
                 Id = 3,
                 Name = "Name3",
                 Description = "Desc3",
-                PointsOfInterest = new List<PointOfInterestDTO>()
+                PointsOfInterestList = new List<PointOfInterestDTO>()
                 {
                     new PointOfInterestDTO()
                     {
