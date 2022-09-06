@@ -12,7 +12,8 @@ namespace CityInfo.API.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<PointOfInterestDTO>> GetPointsOfInterest(int cityId)
         {
-            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
+            var city = CitiesDataStore
+                .Current.Cities.FirstOrDefault(c => c.Id == cityId);
 
             if (city == null) return NotFound();
 
@@ -22,10 +23,14 @@ namespace CityInfo.API.Controllers
         [HttpGet("{pointofinterestid}", Name = "GetPointOfInterest")]
         public ActionResult<PointOfInterestDTO> GetPointOfInterest ( int cityId, int pointOfInterestId)
         {
-            var city = CitiesDataStore.Current.Cities.FirstOrDefault(c => c.Id == cityId);
+            var city = CitiesDataStore
+
+                .Current.Cities.FirstOrDefault(c => c.Id == cityId);
             if (city == null) return NotFound();
 
-            var pointOfInterest = city.PointsOfInterestList.FirstOrDefault(p => p.Id == pointOfInterestId);
+            var pointOfInterest = city
+                .PointsOfInterestList.FirstOrDefault(p => p.Id == pointOfInterestId);
+
             if (pointOfInterest == null) return NotFound();
 
             return Ok(pointOfInterest);
@@ -42,8 +47,8 @@ namespace CityInfo.API.Controllers
             if (city == null)
                 return NotFound();
 
-            var maxPointOfInterestId = CitiesDataStore.Current.Cities.SelectMany(
-                c => c.PointsOfInterestList).Max(p => p.Id);
+            var maxPointOfInterestId = CitiesDataStore
+                .Current.Cities.SelectMany(c => c.PointsOfInterestList).Max(p => p.Id);
 
             var finalPointOfInterest = new PointOfInterestDTO
             {
@@ -57,6 +62,29 @@ namespace CityInfo.API.Controllers
             return CreatedAtRoute("GetPointOfInterest"
                 , new {cityId = cityId, pointOfInterestId = finalPointOfInterest.Id }
                 , finalPointOfInterest);
+        }
+
+        [HttpPut("{pointofinterestid}")]
+        public ActionResult UpdatePointOfInterest(int cityId
+                                                    , int pointOfInterestId
+                                                    , PointOfInterestForUpdateDTO pointOfInterestForUpdateDTO)
+        {
+            var city = CitiesDataStore.Current.Cities
+                .FirstOrDefault(c => c.Id == cityId);
+
+            if (city == null)
+                return NotFound();
+
+            var pointOfInterestFromStore = city
+                .PointsOfInterestList.FirstOrDefault(p => p.Id == pointOfInterestId);
+
+            if (pointOfInterestFromStore == null)
+                return NotFound();
+
+            pointOfInterestFromStore.Name = pointOfInterestForUpdateDTO.Name;
+            pointOfInterestFromStore.Description = pointOfInterestForUpdateDTO.Description;
+
+            return NoContent();
         }
     }
 }
