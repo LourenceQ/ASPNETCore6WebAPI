@@ -4,8 +4,8 @@ namespace CityInfo.API.Entities;
 
 public class CitiesDataStore
 {
-    public List<CityDTO> Cities{ get; set; }
-    public static CitiesDataStore Current { get;  } = new CitiesDataStore();
+    public List<CityDTO> Cities { get; set; }
+    //public static CitiesDataStore Current { get;  } = new CitiesDataStore();
 
     public CitiesDataStore()
     {
