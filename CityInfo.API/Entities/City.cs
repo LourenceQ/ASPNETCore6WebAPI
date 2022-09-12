@@ -22,6 +22,6 @@ public class City
     [MaxLength(200)]
     public string? Description { get; set; }
 
-    public ICollection<PointOfInterestDTO> PointsOfInterest { get; set; }
-        = new List<PointOfInterestDTO>();
+    public ICollection<PointOfInterest> PointsOfInterest { get; set; }
+        = new List<PointOfInterest>();
 }
