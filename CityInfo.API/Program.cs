@@ -29,6 +29,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<FileExtensionContentTypeProvider>();
 
+
 // Registering services
 #if DEBUG
 builder.Services.AddTransient<IMailService, LocalMailService>();
@@ -44,6 +45,8 @@ builder.Services.AddDbContext<CityInfoContext>(options =>
 });
 
 builder.Services.AddScoped<ICityInfoRepository, CityInfoRepository>();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 
