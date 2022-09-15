@@ -6,7 +6,7 @@ namespace CityInfo.API.Data;
 public class CityInfoContext : DbContext
 {
     public DbSet<City> Cities { get; set; } = null!;
-    public DbSet<PointOfInterest> PointOfInterests { get; set; } = null!;
+    public DbSet<PointOfInterest> PointsOfInterests { get; set; } = null!;
 
     public CityInfoContext(DbContextOptions<CityInfoContext> options) : base(options)
     {
