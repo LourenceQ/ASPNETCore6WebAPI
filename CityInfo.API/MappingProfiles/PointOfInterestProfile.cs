@@ -1,0 +1,12 @@
+﻿using AutoMapper;
+
+namespace CityInfo.API.MappingProfiles;
+
+public class PointOfInterestProfile : Profile
+{
+    public PointOfInterestProfile()
+    {
+        CreateMap<Entities.PointOfInterest, Models.PointOfInterestDTO>();
+    }
+
+}

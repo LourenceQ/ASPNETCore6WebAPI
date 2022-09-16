@@ -1,5 +1,7 @@
-﻿using CityInfo.API.Data;
+﻿using AutoMapper;
+using CityInfo.API.Data;
 using CityInfo.API.Models;
+using CityInfo.API.Repository;
 using CityInfo.API.Services;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
@@ -12,58 +14,60 @@ public class PointOfInterestController : ControllerBase
 {
     private readonly ILogger<PointOfInterestController> _logger;
     private readonly IMailService _mailService;
-    private readonly CitiesDataStore _citiesDataStore;
+    private readonly ICityInfoRepository _cityInfoRepository;
+    private readonly IMapper _mapper;
 
     public PointOfInterestController(ILogger<PointOfInterestController> logger
         , IMailService mailService
-        , CitiesDataStore citiesDataStore)
+        , ICityInfoRepository cityInfoRepository
+        , IMapper mapper)
     {
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-        _mailService = mailService;
-        _citiesDataStore = citiesDataStore;
+        _logger = logger
+            ?? throw new ArgumentNullException(nameof(logger));
+        _mailService = mailService
+            ?? throw new ArgumentNullException(nameof(mailService));
+        _cityInfoRepository = cityInfoRepository
+            ?? throw new ArgumentNullException(nameof(cityInfoRepository));
+        _mapper = mapper
+            ?? throw new ArgumentNullException(nameof(mapper));
     }
 
     [HttpGet]
-    public ActionResult<IEnumerable<PointOfInterestDTO>> GetPointsOfInterest(int cityId)
+    public async Task<ActionResult<IEnumerable<PointOfInterestDTO>>> GetPointsOfInterest(int cityId)
     {
-        try
+        if (!await _cityInfoRepository.CityExitsAsync(cityId))
         {
-            var city = _citiesDataStore.Cities.FirstOrDefault(c => c.Id == cityId);
-
-            if (city == null)
-            {
-                _logger.LogInformation($"City with id {cityId} wasn't found.");
-                return NotFound();
-            }
-
-            return Ok(city.PointsOfInterestList);
+            _logger.LogInformation(
+                $"City with id {cityId} wasn't found when accessing points of interest.");
+            return NotFound();
         }
-        catch (Exception ex)
-        {
-            _logger.LogCritical(
-                $"Exception while getting point of interest for city with id {cityId}."
-                , ex);
 
-            return StatusCode(500, "A problem happend while handling the request");
-        }
+        var pointsOfInterestForCity = await _cityInfoRepository
+            .GetPointsOfInterestForCityAsync(cityId);
+
+        return Ok(_mapper.Map<IEnumerable<PointOfInterestDTO>>(pointsOfInterestForCity));
+
     }
 
     [HttpGet("{pointofinterestid}", Name = "GetPointOfInterest")]
-    public ActionResult<PointOfInterestDTO> GetPointOfInterest(int cityId, int pointOfInterestId)
+    public async Task<ActionResult<PointOfInterestDTO>> GetPointOfInterest(int cityId, int pointOfInterestId)
     {
-        var city = _citiesDataStore.Cities.FirstOrDefault(c => c.Id == cityId);
-        if (city == null) return NotFound();
+        if (!await _cityInfoRepository.CityExitsAsync(cityId))
+        {
+            return NotFound();
+        }
 
-        var pointOfInterest = city
-            .PointsOfInterestList.FirstOrDefault(p => p.Id == pointOfInterestId);
+        var pointOfInterest = await _cityInfoRepository
+            .GetPointOfInterestForCityAsync(cityId, pointOfInterestId);
 
-        if (pointOfInterest == null) return NotFound();
+        if (pointOfInterest == null)
+            return NotFound();
 
-        return Ok(pointOfInterest);
+        return Ok(_mapper.Map<PointOfInterestDTO>(pointOfInterest));
 
     }
 
-    [HttpPost]
+    /*[HttpPost]
     public ActionResult<PointOfInterestForCreationDTO> CreatePointOfInterest(
         int cityId
         , PointOfInterestForCreationDTO pointOfInterestForCreationDTO)
@@ -170,5 +174,5 @@ public class PointOfInterestController : ControllerBase
             $" with id {pointOfInterestFromStore.Id} was deleted.");
 
         return NoContent();
-    }
+    }*/
 }
