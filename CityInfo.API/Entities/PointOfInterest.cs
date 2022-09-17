@@ -22,6 +22,6 @@ public class PointOfInterest
     public string Description { get; set; }
 
     [ForeignKey("CityId")]
-    public City? city { get; set; }
+    public City? City { get; set; }
     public int CityId { get; set; }
 }

@@ -23,7 +23,7 @@ namespace CityInfo.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PointOfInterests",
+                name: "PointsOfInterests",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
@@ -34,9 +34,9 @@ namespace CityInfo.API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PointOfInterests", x => x.Id);
+                    table.PrimaryKey("PK_PointsOfInterests", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PointOfInterests_Cities_CityId",
+                        name: "FK_PointsOfInterests_Cities_CityId",
                         column: x => x.CityId,
                         principalTable: "Cities",
                         principalColumn: "Id",
@@ -59,30 +59,30 @@ namespace CityInfo.API.Migrations
                 values: new object[] { 3, "The one with that big tower", "Paris" });
 
             migrationBuilder.InsertData(
-                table: "PointOfInterests",
+                table: "PointsOfInterests",
                 columns: new[] { "Id", "CityId", "Description", "Name" },
                 values: new object[] { 1, 1, "The most visited urban park in United States", "Central Park" });
 
             migrationBuilder.InsertData(
-                table: "PointOfInterests",
+                table: "PointsOfInterests",
                 columns: new[] { "Id", "CityId", "Description", "Name" },
                 values: new object[] { 2, 1, "A 102-story skyscraper located in Midtown Manhattan.", "Empire State Building" });
 
             migrationBuilder.InsertData(
-                table: "PointOfInterests",
+                table: "PointsOfInterests",
                 columns: new[] { "Id", "CityId", "Description", "Name" },
                 values: new object[] { 3, 2, "A Cothic style cathedral.", "Cathedral" });
 
             migrationBuilder.CreateIndex(
-                name: "IX_PointOfInterests_CityId",
-                table: "PointOfInterests",
+                name: "IX_PointsOfInterests_CityId",
+                table: "PointsOfInterests",
                 column: "CityId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PointOfInterests");
+                name: "PointsOfInterests");
 
             migrationBuilder.DropTable(
                 name: "Cities");

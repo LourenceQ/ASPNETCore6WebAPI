@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CityInfo.API.Controllers;
 
-[Route("api/cities")]
 [ApiController]
+[Route("api/cities")]
 public class CitiesController : ControllerBase
 {
     private readonly ICityInfoRepository _cityInfoRepository;
@@ -36,7 +36,8 @@ public class CitiesController : ControllerBase
     {
         var city = await _cityInfoRepository.GetCityAsync(id, includePointsOfInterest);
 
-        if (city == null) return NotFound();
+        if (city == null)
+            return NotFound();
 
         if (includePointsOfInterest)
             return Ok(_mapper.Map<CityDTO>(city));

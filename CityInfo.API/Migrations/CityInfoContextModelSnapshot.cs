@@ -79,7 +79,7 @@ namespace CityInfo.API.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.ToTable("PointOfInterests");
+                    b.ToTable("PointsOfInterests");
 
                     b.HasData(
                         new
@@ -107,13 +107,13 @@ namespace CityInfo.API.Migrations
 
             modelBuilder.Entity("CityInfo.API.Entities.PointOfInterest", b =>
                 {
-                    b.HasOne("CityInfo.API.Entities.City", "city")
+                    b.HasOne("CityInfo.API.Entities.City", "City")
                         .WithMany("PointsOfInterest")
                         .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("city");
+                    b.Navigation("City");
                 });
 
             modelBuilder.Entity("CityInfo.API.Entities.City", b =>
