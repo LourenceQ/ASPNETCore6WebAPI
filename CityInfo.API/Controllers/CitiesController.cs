@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using CityInfo.API.Data;
 using CityInfo.API.Models;
 using CityInfo.API.Repository;
 using Microsoft.AspNetCore.Mvc;

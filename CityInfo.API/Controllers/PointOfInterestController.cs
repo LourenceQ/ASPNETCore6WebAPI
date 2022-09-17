@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
-using CityInfo.API.Data;
 using CityInfo.API.Models;
 using CityInfo.API.Repository;
 using CityInfo.API.Services;
-using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CityInfo.API.Controllers;
@@ -99,29 +97,26 @@ public class PointOfInterestController : ControllerBase
             , createdCreatedPointOfInterestoReturn);
     }
 
-    /*
+
     [HttpPut("{pointofinterestid}")]
-    public ActionResult UpdatePointOfInterest(int cityId
+    public async Task<ActionResult> UpdatePointOfInterest(int cityId
         , int pointOfInterestId
         , PointOfInterestForUpdateDTO pointOfInterestForUpdateDTO)
     {
-        var city = _citiesDataStore.Cities.FirstOrDefault(c => c.Id == cityId);
-
-        if (city == null)
+        if (!await _cityInfoRepository.CityExistsAsync(cityId))
             return NotFound();
 
-        var pointOfInterestFromStore = city
-            .PointsOfInterestList.FirstOrDefault(p => p.Id == pointOfInterestId);
+        var pointOfInterestEntity = await _cityInfoRepository
+            .GetPointOfInterestForCityAsync(cityId, pointOfInterestId);
 
-        if (pointOfInterestFromStore == null)
-            return NotFound();
+        _mapper.Map(pointOfInterestForUpdateDTO, pointOfInterestEntity);
 
-        pointOfInterestFromStore.Name = pointOfInterestForUpdateDTO.Name;
-        pointOfInterestFromStore.Description = pointOfInterestForUpdateDTO.Description;
+        await _cityInfoRepository.SaveChangesAsync();
 
         return NoContent();
     }
 
+    /*
     [HttpPatch("{pointofinteretid}")]
     public ActionResult PartiallyUpdatePointOfInterest(int cityId
         , int pointOfInterestId, JsonPatchDocument<PointOfInterestForUpdateDTO> pacthDocument)
