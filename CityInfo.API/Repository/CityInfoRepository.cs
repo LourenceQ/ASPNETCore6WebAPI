@@ -1,6 +1,7 @@
 ﻿using CityInfo.API.Data;
 using CityInfo.API.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace CityInfo.API.Repository;
 
@@ -69,16 +70,26 @@ public class CityInfoRepository : ICityInfoRepository
         _context.PointsOfInterests.Remove(pointOfInterest);
     }
 
-    public async Task<IEnumerable<City>> GetCitiesAsync(string? name)
+    public async Task<IEnumerable<City>> GetCitiesAsync(string? name, string? searchQuery)
     {
-        if (string.IsNullOrEmpty(name))
+        if (string.IsNullOrEmpty(name) && string.IsNullOrWhiteSpace(searchQuery))
             return await GetCitiesAsync();
 
-        name = name.Trim();
+        var collection = _context.Cities as IQueryable<City>;
 
-        return await _context.Cities
-            .Where(c => c.Name == name)
-            .OrderBy(c => c.Name)
-            .ToListAsync();
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            name = name.Trim();
+            collection = collection.Where(c => c.Name == name);
+        }
+
+        if (!string.IsNullOrWhiteSpace(searchQuery))
+        {
+            searchQuery = searchQuery.Trim();
+            collection = collection.Where(a => a.Name.Contains(searchQuery)
+                || (a.Description != null && a.Description.Contains(searchQuery)));
+        }
+
+        return await collection.OrderBy(c => c.Name).ToListAsync();
     }
 }
