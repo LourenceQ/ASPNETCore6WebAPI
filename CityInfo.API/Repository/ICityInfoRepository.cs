@@ -1,11 +1,12 @@
 ﻿using CityInfo.API.Entities;
+using CityInfo.API.Services;
 
 namespace CityInfo.API.Repository;
 
 public interface ICityInfoRepository
 {
     Task<IEnumerable<City>> GetCitiesAsync();
-    Task<IEnumerable<City>> GetCitiesAsync(
+    Task<(IEnumerable<City>, PaginationMetadata)> GetCitiesAsync(
         string? name, string? searchQuery, int pageNumnber, int pageSize);
     Task<City?> GetCityAsync(int cityId, bool includePointsOfInterest);
     Task<IEnumerable<PointOfInterest?>> GetPointsOfInterestForCityAsync(int cityId);

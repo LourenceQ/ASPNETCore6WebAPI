@@ -1,5 +1,6 @@
 ﻿using CityInfo.API.Data;
 using CityInfo.API.Entities;
+using CityInfo.API.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace CityInfo.API.Repository;
@@ -69,7 +70,7 @@ public class CityInfoRepository : ICityInfoRepository
         _context.PointsOfInterests.Remove(pointOfInterest);
     }
 
-    public async Task<IEnumerable<City>> GetCitiesAsync(
+    public async Task<(IEnumerable<City>, PaginationMetadata)> GetCitiesAsync(
         string? name, string? searchQuery, int pageNumber, int pageSize)
     {
         var collection = _context.Cities as IQueryable<City>;
@@ -87,9 +88,16 @@ public class CityInfoRepository : ICityInfoRepository
                 || (a.Description != null && a.Description.Contains(searchQuery)));
         }
 
-        return await collection.OrderBy(c => c.Name)
+        var totalItemCount = await collection.CountAsync();
+
+        var paginationMetadata = new PaginationMetadata(
+            totalItemCount, pageSize, pageNumber);
+
+        var collectionToReturn = await collection.OrderBy(c => c.Name)
             .Skip(pageSize * (pageNumber - 1))
             .Take(pageSize)
             .ToListAsync();
+
+        return (collectionToReturn, paginationMetadata);
     }
 }
