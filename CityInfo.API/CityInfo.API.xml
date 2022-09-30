@@ -12,6 +12,7 @@
             <param name="includePointsOfInterest">Se inclui ou não pontos de interesse
             da cidade </param>
             <returns>IActionResult</returns>
+            <response code ="200">Retorna a cidade requisitada</response>
         </member>
         <member name="T:CityInfo.API.Models.CityWithoutPointsOfInterestDTO">
             <summary>

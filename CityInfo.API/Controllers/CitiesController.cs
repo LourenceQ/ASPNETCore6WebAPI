@@ -43,7 +43,6 @@ public class CitiesController : ControllerBase
             .Map<IEnumerable<CityWithoutPointsOfInterestDTO>>(cityEntities));
     }
 
-
     /// <summary>
     /// Obter cidade por id
     /// </summary>
@@ -51,7 +50,11 @@ public class CitiesController : ControllerBase
     /// <param name="includePointsOfInterest">Se inclui ou não pontos de interesse
     /// da cidade </param>
     /// <returns>IActionResult</returns>
+    /// <response code ="200">Retorna a cidade requisitada</response>
     [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetCity(int id, bool includePointsOfInterest = false)
     {
         var city = await _cityInfoRepository.GetCityAsync(id, includePointsOfInterest);
