@@ -8,8 +8,9 @@ using System.Text.Json;
 namespace CityInfo.API.Controllers;
 
 [ApiController]
-//[Authorize]
+[Authorize]
 [ApiVersion("1.0")]
+[ApiVersion("2.0")]
 [Route("api/v{version:apiVersion}/cities")]
 public class CitiesController : ControllerBase
 {
@@ -42,6 +43,14 @@ public class CitiesController : ControllerBase
             .Map<IEnumerable<CityWithoutPointsOfInterestDTO>>(cityEntities));
     }
 
+
+    /// <summary>
+    /// Obter cidade por id
+    /// </summary>
+    /// <param name="id">Id da cidade a obter</param>
+    /// <param name="includePointsOfInterest">Se inclui ou não pontos de interesse
+    /// da cidade </param>
+    /// <returns>IActionResult</returns>
     [HttpGet("{id}")]
     public async Task<IActionResult> GetCity(int id, bool includePointsOfInterest = false)
     {
